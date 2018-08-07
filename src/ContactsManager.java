@@ -27,10 +27,22 @@ public class ContactsManager {
             Integer choice = sc.nextInt();
 
             if (choice == 1) {
+
+                System.out.println("Name    |   Phone\n----------------------");
+
                 try {
                     List<String> allContacts = Files.readAllLines(contactRecords);
                     for (String contact: allContacts) {
-                        System.out.println(contact);
+                        int indexDash = contact.indexOf("-");
+                        String phoneNum = contact.substring(indexDash +1);
+                        System.out.println(phoneNum.length());
+                        if (phoneNum.length() == 10) {
+                            System.out.println(contact.substring(0, indexDash) + " | (" + phoneNum.substring(0, 3) + ")" + phoneNum.substring(3, 6) + "-" + phoneNum.substring(6));
+                        }
+                        else if (phoneNum.length() == 7) {
+                            System.out.println(contact.substring(0, indexDash) + " | " + phoneNum.substring(0, 3) + "-" + phoneNum.substring(3));
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -53,7 +65,31 @@ public class ContactsManager {
                    System.out.println("error");
                }
 
-            } else if (choice == 4) {
+            }
+
+            else if (choice == 3){
+                System.out.println("Enter a name to search by:");
+                sc.nextLine();
+                String searchName = sc.nextLine();
+
+                try {
+                    List<String> allContacts = Files.readAllLines(contactRecords);
+                    for (String contact: allContacts) {
+
+                        if (contact.startsWith(searchName)) {
+                            System.out.println(contact);
+                        }
+                        else System.out.println("No one by that name.");
+                        break;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            else if (choice == 4) {
                 System.out.println("What is the name of the contact you would like to delete?");
                 sc.nextLine();
                 String deleteChoice = sc.nextLine();
@@ -65,7 +101,8 @@ public class ContactsManager {
                     List<String> allContacts = Files.readAllLines(contactRecords);
                     for (String contact: allContacts) {
 
-                        if (contact.startsWith(deleteChoice)) {
+                        int indexDash = contact.indexOf("-");
+                        if (contact.substring(0, indexDash).equalsIgnoreCase(deleteChoice)) {
                             continue;
                         }
 
