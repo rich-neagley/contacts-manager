@@ -121,8 +121,8 @@ public class WindowFrame {
                 case "button2":
                     try {
                         String name = JOptionPane.showInputDialog("Enter in the name of the contact");
-                        String number = JOptionPane.showInputDialog("Enter in contacts number");
                         List<String> newContact = new ArrayList<>();
+                        String number = JOptionPane.showInputDialog("Enter in contacts number");
                         newContact.add(name + "-" + number);
                         if (name == null){
 
@@ -140,7 +140,7 @@ public class WindowFrame {
                     }
                 case "button3":
                     try {
-                        String searchName = JOptionPane.showInputDialog("Enter the name you want to search");
+                        String searchName = JOptionPane.showInputDialog("Enter the name you want to search").toLowerCase();
                         List<String> allContacts = Files.readAllLines(contactRecords);
                         List<String> matchingContacts = new ArrayList<>();
                         for (String contact: allContacts) {
