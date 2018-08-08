@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,13 +38,13 @@ public class WindowFrame {
         window = new JFrame();
         window.setSize(800,600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.getContentPane().setBackground(Color.blue);
+        window.getContentPane().setBackground(Color.black);
         window.setLayout(null);
         con = window.getContentPane();
 
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100,0,600,100);
-        titleNamePanel.setBackground(Color.red);
+        titleNamePanel.setBackground(Color.black);
         titleNameLabel = new JLabel("Contacts Manager");
         titleNameLabel.setForeground(Color.CYAN);
         titleNameLabel.setFont(titleFont);
@@ -55,13 +56,13 @@ public class WindowFrame {
         buttonPanel.setBackground(Color.black);
         buttonPanel.setLayout(new GridLayout(5, 1));
         buttonLabel = new JLabel("Please make a selection:");
-        buttonLabel.setForeground(Color.GREEN);
+        buttonLabel.setForeground(Color.red);
         buttonPanel.add(buttonLabel);
         con.add(buttonPanel);
 
         contactListPanel = new JPanel();
         contactListPanel.setBounds(100, 100, 600, 300);
-        contactListPanel.setBackground(Color.green);
+        contactListPanel.setBackground(Color.red);
         con.add(contactListPanel);
 
 
@@ -70,8 +71,9 @@ public class WindowFrame {
 
         contactListing = new JTextArea("Contact List:");
         contactListing.setBounds(100, 100, 600, 300);
-        contactListing.setBackground(Color.GREEN);
-        contactListing.setForeground(Color.BLACK);
+        contactListing.setEditable(false);
+        contactListing.setBackground(Color.red);
+        contactListing.setForeground(Color.white);
         contactListing.setFont(normalFont);
         contactListPanel.add(contactListing);
 
@@ -113,33 +115,22 @@ public class WindowFrame {
 
             switch (choice){
                 case "button1":
-                     try {
-                        List<String> allContacts = Files.readAllLines(contactRecords);
-                         contactListing.setText("");
-                        for (String contact: allContacts) {
-                            int indexDash = contact.indexOf("-");
-                            String phoneNum = contact.substring(indexDash +1);
-                            if (phoneNum.length() == 10) {
-                                contactListing.setText(contact.substring(0, indexDash) +"   (" + phoneNum.substring(0, 3) + ")" + phoneNum.substring(3, 6) + "-" + phoneNum.substring(6) + "\n");
-                            }
-                            else if (phoneNum.length() == 7) {
-                                contactListing.append(contact.substring(0, indexDash) +" "+ phoneNum.substring(0, 3) + "-" + phoneNum.substring(3) + "\n" );
-                            } else {
-                                contactListing.append(contact.substring(0, indexDash)+" "+ phoneNum + "\n");
-                            }
-                        }
-                        break;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        break;
-                    }
+                    displayContactsList();
+
+                    break;
                 case "button2":
                     try {
                         String name = JOptionPane.showInputDialog("Enter in the name of the contact");
                         String number = JOptionPane.showInputDialog("Enter in contacts number");
                         List<String> newContact = new ArrayList<>();
                         newContact.add(name + "-" + number);
-                        Files.write(contactRecords, newContact, StandardOpenOption.APPEND);
+                        if (name == null){
+
+                        }
+                        else {
+                            Files.write(contactRecords, newContact, StandardOpenOption.APPEND);
+                            displayContactsList();
+                        }
                         break;
 
 
@@ -167,18 +158,73 @@ public class WindowFrame {
 
                             }
                         }
+                        break;
                     } catch (NullPointerException e) {
                         break;
 
                     } catch (Exception e) {
                         break;
-
                     }
 
+                case "button4":
 
+                    List<String> contactsAfterDeleted = new ArrayList<>();
+                    String deleteChoice = JOptionPane.showInputDialog("Please enter the name you would likē to delete");
+                    try {
+                        List<String> eachContact = Files.readAllLines(contactRecords);
+                        for (String contact: eachContact) {
+                            if (!contact.contains(deleteChoice)) {
+                                contactListing.setText("No matches found");
+                            } else {
+                                try {
+                                    List<String> allContacts = Files.readAllLines(contactRecords);
+                                    for (String contactN: allContacts) {
+
+                                        int indexDash = contactN.indexOf("-");
+                                        contactListing.setText("");
+                                        if (contactN.substring(0, indexDash).equalsIgnoreCase(deleteChoice)) {
+                                            continue;
+                                        }
+                                        contactsAfterDeleted.add(contactN);
+                                    }
+                                    Files.write(Paths.get("src/", "contacts.txt"), contactsAfterDeleted);
+                                    displayContactsList();
+                                    break;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        break;
+                    } catch (Exception e){
+                        break;
+                    }
 
             }
+        }
+    }
 
+    public static void displayContactsList() {
+        try {
+            List<String> allContacts = Files.readAllLines(contactRecords);
+            contactListing.setText("");
+            for (String contact: allContacts) {
+                int indexDash = contact.indexOf("-");
+                String phoneNum = contact.substring(indexDash +1);
+
+                if (phoneNum.length() == 10) {
+                    contactListing.append(contact.substring(0, indexDash) +"   (" + phoneNum.substring(0, 3) + ")" + phoneNum.substring(3, 6) + "-" + phoneNum.substring(6) + "\n");
+                }
+                else if (phoneNum.length() == 7) {
+                    contactListing.append(contact.substring(0, indexDash) +" "+ phoneNum.substring(0, 3) + "-" + phoneNum.substring(3) + "\n" );
+                } else {
+                    contactListing.append(contact.substring(0, indexDash)+" "+ phoneNum + "\n");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
