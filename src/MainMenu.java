@@ -9,8 +9,13 @@ public class MainMenu {
         System.out.println("4. Delete an existing contact");
         System.out.println("5. Exit");
         System.out.println("Enter an option (1, 2, 3, 4 or 5):");
-        Integer choice = sc.nextInt();
-        System.out.println(choice);
-        return choice;
+        try {
+            int choice = sc.nextInt();
+            return choice;
+        } catch (Exception e){
+            System.out.println("Please enter a valid number.");
+            int choice = mainMenu();
+            return choice;
+        }
     }
 }

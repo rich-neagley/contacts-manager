@@ -11,14 +11,14 @@ public class SearchContact {
         Scanner sc = new Scanner(System.in);
         DisplayContact.displayContact();
         System.out.println("Enter a name to search by:");
-        String searchName = sc.nextLine();
+        String searchName = sc.nextLine().toLowerCase();
 
         try {
             List<String> allContacts = Files.readAllLines(contactRecords);
             List<String> matchingContacts = new ArrayList<>();
             for (String contact: allContacts) {
 
-                if (contact.startsWith(searchName)) {
+                if (contact.toLowerCase().startsWith(searchName)) {
                     matchingContacts.add(contact);
                 }
             }

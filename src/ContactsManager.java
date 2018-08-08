@@ -16,7 +16,7 @@ public class ContactsManager {
 
             } else if (choice == 5) {
                 break;
-            }
+            } else System.out.println("Please enter one of the listed options.");
         } while (true);
     }
 
