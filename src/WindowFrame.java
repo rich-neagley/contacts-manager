@@ -56,7 +56,7 @@ public class WindowFrame {
         buttonPanel.setBackground(Color.black);
         buttonPanel.setLayout(new GridLayout(5, 1));
         buttonLabel = new JLabel("Please make a selection:");
-        buttonLabel.setForeground(Color.red);
+        buttonLabel.setForeground(Color.green);
         buttonPanel.add(buttonLabel);
         con.add(buttonPanel);
 
@@ -217,9 +217,9 @@ public class WindowFrame {
                     contactListing.append(contact.substring(0, indexDash) +"   (" + phoneNum.substring(0, 3) + ")" + phoneNum.substring(3, 6) + "-" + phoneNum.substring(6) + "\n");
                 }
                 else if (phoneNum.length() == 7) {
-                    contactListing.append(contact.substring(0, indexDash) +" "+ phoneNum.substring(0, 3) + "-" + phoneNum.substring(3) + "\n" );
+                    contactListing.append(contact.substring(0, indexDash) +"    "+ phoneNum.substring(0, 3) + "-" + phoneNum.substring(3) + "\n" );
                 } else {
-                    contactListing.append(contact.substring(0, indexDash)+" "+ phoneNum + "\n");
+                    contactListing.append(contact.substring(0, indexDash)+"    "+ phoneNum + "\n");
                 }
             }
 
