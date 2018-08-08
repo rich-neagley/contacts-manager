@@ -8,7 +8,6 @@ public class ContactsManager {
                 DisplayContact.displayContact();
             } else if (choice == 2) {
               AddContact.addContact();
-
             } else if (choice == 3){
                 SearchContact.searchContact();
             } else if (choice == 4) {

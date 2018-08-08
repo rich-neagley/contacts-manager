@@ -169,11 +169,11 @@ public class WindowFrame {
                 case "button4":
 
                     List<String> contactsAfterDeleted = new ArrayList<>();
-                    String deleteChoice = JOptionPane.showInputDialog("Please enter the name you would likē to delete");
+                    String deleteChoice = JOptionPane.showInputDialog("Please enter the name you would likē to delete").toLowerCase();
                     try {
                         List<String> eachContact = Files.readAllLines(contactRecords);
                         for (String contact: eachContact) {
-                            if (!contact.contains(deleteChoice)) {
+                            if (!contact.toLowerCase().contains(deleteChoice)) {
                                 contactListing.setText("No matches found");
                             } else {
                                 try {
