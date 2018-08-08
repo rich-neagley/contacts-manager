@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class WindowFrame {
     static Container con;
@@ -112,6 +115,7 @@ public class WindowFrame {
                 case "button1":
                      try {
                         List<String> allContacts = Files.readAllLines(contactRecords);
+                         contactListing.setText("");
                         for (String contact: allContacts) {
                             int indexDash = contact.indexOf("-");
                             String phoneNum = contact.substring(indexDash +1);
@@ -130,6 +134,46 @@ public class WindowFrame {
                         break;
                     }
                 case "button2":
+                    try {
+                        String name = JOptionPane.showInputDialog("Enter in the name of the contact");
+                        String number = JOptionPane.showInputDialog("Enter in contacts number");
+                        List<String> newContact = new ArrayList<>();
+                        newContact.add(name + "-" + number);
+                        Files.write(contactRecords, newContact, StandardOpenOption.APPEND);
+                        break;
+
+
+                    } catch (Exception e) {
+                        System.out.println("error");
+                        break;
+                    }
+                case "button3":
+                    try {
+                        String searchName = JOptionPane.showInputDialog("Enter the name you want to search");
+                        List<String> allContacts = Files.readAllLines(contactRecords);
+                        List<String> matchingContacts = new ArrayList<>();
+                        for (String contact: allContacts) {
+
+                            if (contact.toLowerCase().startsWith(searchName)) {
+                                matchingContacts.add(contact);
+                            }
+                        }
+                        if (matchingContacts.isEmpty()) {
+                            contactListing.setText("No matches in our system");
+                        } else {
+                            contactListing.setText("");
+                            for (String contact: matchingContacts) {
+                                contactListing.append(contact + "\n");
+
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        break;
+
+                    } catch (Exception e) {
+                        break;
+
+                    }
 
 
 
